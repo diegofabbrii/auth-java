@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(UserAlreadyExistsException.class)
-	public ResponseEntity<?> userAlreadyExistsHandler(UserAlreadyExistsException exception) {
+	public ResponseEntity<ErrorMessageDTO> userAlreadyExistsHandler(UserAlreadyExistsException exception) {
 		ErrorMessageDTO responseError = new ErrorMessageDTO(
 			400,
 			exception.getMessage()
@@ -26,7 +26,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(AuthenticationFailedException.class)
-	public ResponseEntity<?> authenticationFailedHandler(AuthenticationFailedException exception) {
+	public ResponseEntity<ErrorMessageDTO> authenticationFailedHandler(AuthenticationFailedException exception) {
 		ErrorMessageDTO responseError = new ErrorMessageDTO(
 			400,
 			exception.getMessage()
@@ -38,7 +38,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(AccountNotRegisteredException.class)
-	public ResponseEntity<?> accountNotRegisteredHandler(AccountNotRegisteredException exception) {
+	public ResponseEntity<ErrorMessageDTO> accountNotRegisteredHandler(AccountNotRegisteredException exception) {
 		ErrorMessageDTO responseError = new ErrorMessageDTO(
 			400,
 			exception.getMessage()
