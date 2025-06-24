@@ -19,11 +19,13 @@ public class AuthController {
 	}
 	
 	@PostMapping("sign-up")
-	public ResponseEntity<?> signUp(@RequestBody SignUpRequestDTO body) {
+	public ResponseEntity<SuccessMessageDTO> signUp(@RequestBody SignUpRequestDTO body) {
 		_authService.signUp(body);
+		
+		SuccessMessageDTO responseSuccess = new SuccessMessageDTO("Usuário criado!");
 		
 		return ResponseEntity
 			.ok()
-			.body(new SuccessMessageDTO("Usuário criado!"));
+			.body(responseSuccess);
 	}
 }
