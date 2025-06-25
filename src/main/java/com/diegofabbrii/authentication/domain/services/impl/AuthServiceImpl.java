@@ -1,6 +1,7 @@
 package com.diegofabbrii.authentication.domain.services.impl;
 
 import com.diegofabbrii.authentication.domain.dtos.auth.SignUpRequestDTO;
+import com.diegofabbrii.authentication.domain.enums.UserRoleEnum;
 import com.diegofabbrii.authentication.domain.exceptions.auth.UserAlreadyExistsException;
 import com.diegofabbrii.authentication.domain.models.User;
 import com.diegofabbrii.authentication.domain.services.interfaces.AuthService;
@@ -12,12 +13,13 @@ import java.util.Optional;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-	private UserRepository _userRepository;
+	private final UserRepository _userRepository;
 
 	public AuthServiceImpl(UserRepository userRepository) {
 		_userRepository = userRepository;
 	}
 
+	@Override
 	public void signUp(SignUpRequestDTO signUpRequestDTO) {
     Optional<User> existedUsername = _userRepository.findByUsername(signUpRequestDTO.username());
 		
@@ -34,6 +36,7 @@ public class AuthServiceImpl implements AuthService {
 		createdUser.setUsername(signUpRequestDTO.username());
 		createdUser.setEmail(signUpRequestDTO.email());
 		createdUser.setPassword(signUpRequestDTO.password());
+		createdUser.setRole(UserRoleEnum.USER);
 		
 		_userRepository.save(createdUser);
 	}
