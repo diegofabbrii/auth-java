@@ -6,6 +6,7 @@ import com.diegofabbrii.authentication.domain.exceptions.auth.AuthenticationFail
 import com.diegofabbrii.authentication.domain.exceptions.auth.UserAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -28,7 +29,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(AuthenticationFailedException.class)
 	public ResponseEntity<ErrorMessageDTO> authenticationFailedHandler(AuthenticationFailedException exception) {
 		ErrorMessageDTO responseError = new ErrorMessageDTO(
-			400,
+			  400,
 			exception.getMessage()
 		);
 		
@@ -42,6 +43,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		ErrorMessageDTO responseError = new ErrorMessageDTO(
 			400,
 			exception.getMessage()
+		);
+		
+		return ResponseEntity
+			.status(HttpStatus.BAD_REQUEST)
+			.body(responseError);
+	}
+	
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<ErrorMessageDTO> badCredentialsExceptionHandler(BadCredentialsException exception) {
+		ErrorMessageDTO responseError = new ErrorMessageDTO(
+			400,
+			"Nome de usuário ou senha inválidos!"
 		);
 		
 		return ResponseEntity
