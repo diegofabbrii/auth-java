@@ -1,6 +1,7 @@
 package com.diegofabbrii.authentication.application.controllers.auth;
 
 import com.diegofabbrii.authentication.domain.dtos.auth.SignInRequestDTO;
+import com.diegofabbrii.authentication.domain.dtos.auth.SignInResponseDTO;
 import com.diegofabbrii.authentication.domain.dtos.auth.SignUpRequestDTO;
 import com.diegofabbrii.authentication.domain.dtos.success.SuccessMessageDTO;
 import com.diegofabbrii.authentication.domain.services.interfaces.AuthService;
@@ -31,13 +32,12 @@ public class AuthController {
 	}
 	
 	@PostMapping("sign-in")
-	public ResponseEntity<SuccessMessageDTO> signIn(@RequestBody SignInRequestDTO body) {
-		_authService.signIn(body);
+	public ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInRequestDTO body) {
 		
-		SuccessMessageDTO responseSuccess = new SuccessMessageDTO("Usuário fez login!");
+		SignInResponseDTO response = _authService.signIn(body);
 		
 		return ResponseEntity
 			.ok()
-			.body(responseSuccess);
+			.body(response);
 	}
 }

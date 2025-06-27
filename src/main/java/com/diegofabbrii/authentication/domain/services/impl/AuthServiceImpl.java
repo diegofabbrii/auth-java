@@ -1,12 +1,15 @@
 package com.diegofabbrii.authentication.domain.services.impl;
 
 import com.diegofabbrii.authentication.domain.dtos.auth.SignInRequestDTO;
+import com.diegofabbrii.authentication.domain.dtos.auth.SignInResponseDTO;
 import com.diegofabbrii.authentication.domain.dtos.auth.SignUpRequestDTO;
+import com.diegofabbrii.authentication.domain.dtos.user.UserDTO;
 import com.diegofabbrii.authentication.domain.enums.UserRoleEnum;
 import com.diegofabbrii.authentication.domain.exceptions.auth.UserAlreadyExistsException;
 import com.diegofabbrii.authentication.domain.models.User;
 import com.diegofabbrii.authentication.domain.services.interfaces.AuthService;
 import com.diegofabbrii.authentication.infra.data.repositories.UserRepository;
+import com.diegofabbrii.authentication.infra.jwt.JwtTokenService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,13 +22,16 @@ public class AuthServiceImpl implements AuthService {
 
 	private final UserRepository _userRepository;
 	private final AuthenticationManager _authenticationManager;
+	private final JwtTokenService _jwtTokenService;
 
 	public AuthServiceImpl(
 			UserRepository userRepository,
-			AuthenticationManager authenticationManager
+			AuthenticationManager authenticationManager,
+			JwtTokenService jwtTokenService
 	) {
 		_userRepository = userRepository;
 		_authenticationManager = authenticationManager;
+		_jwtTokenService = jwtTokenService;
 	}
 
 	@Override
@@ -54,13 +60,27 @@ public class AuthServiceImpl implements AuthService {
 	}
 	
 	@Override
-	public void signIn(SignInRequestDTO signInRequestDTO) {
+	public SignInResponseDTO signIn(SignInRequestDTO signInRequestDTO) {
 		var usernamePassowrd = new UsernamePasswordAuthenticationToken(
 			signInRequestDTO.username(),
 			signInRequestDTO.password()
 		);
 		
-		_authenticationManager.authenticate(usernamePassowrd);
+		var auth = _authenticationManager.authenticate(usernamePassowrd);
+		
+		String token = _jwtTokenService.generatetoken((User) auth.getPrincipal());
+		
+		SignInResponseDTO response = new SignInResponseDTO(
+			token,
+			new UserDTO(
+				((User) auth.getPrincipal()).getId(),
+				((User) auth.getPrincipal()).getUsername(),
+				((User) auth.getPrincipal()).getEmail(),
+				((User) auth.getPrincipal()).getRole()
+		  )
+		);
+		
+		return response;
 	}
 	
 }
