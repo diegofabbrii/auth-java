@@ -1,4 +1,4 @@
-package com.diegofabbrii.authentication.domain.services.impl;
+package com.diegofabbrii.authentication.domain.services.impl.auth;
 
 import com.diegofabbrii.authentication.domain.dtos.auth.SignInRequestDTO;
 import com.diegofabbrii.authentication.domain.dtos.auth.SignInResponseDTO;

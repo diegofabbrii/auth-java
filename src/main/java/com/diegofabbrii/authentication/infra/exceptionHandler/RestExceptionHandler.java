@@ -4,6 +4,7 @@ import com.diegofabbrii.authentication.domain.dtos.errors.ErrorMessageDTO;
 import com.diegofabbrii.authentication.domain.exceptions.auth.AccountNotRegisteredException;
 import com.diegofabbrii.authentication.domain.exceptions.auth.AuthenticationFailedException;
 import com.diegofabbrii.authentication.domain.exceptions.auth.UserAlreadyExistsException;
+import com.diegofabbrii.authentication.domain.exceptions.product.ProductAlreadyExists;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -55,6 +56,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		ErrorMessageDTO responseError = new ErrorMessageDTO(
 			400,
 			"Nome de usuário ou senha inválidos!"
+		);
+		
+		return ResponseEntity
+			.status(HttpStatus.BAD_REQUEST)
+			.body(responseError);
+	}
+	
+	@ExceptionHandler(ProductAlreadyExists.class)
+	public ResponseEntity<ErrorMessageDTO> productAlreadyExistsHandler(ProductAlreadyExists exception) {
+		ErrorMessageDTO responseError = new ErrorMessageDTO(
+			400,
+			exception.getMessage()
 		);
 		
 		return ResponseEntity

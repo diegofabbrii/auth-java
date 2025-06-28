@@ -1,4 +1,4 @@
-package com.diegofabbrii.authentication.domain.services.impl;
+package com.diegofabbrii.authentication.domain.services.impl.auth;
 
 import com.diegofabbrii.authentication.domain.exceptions.auth.AuthenticationFailedException;
 import com.diegofabbrii.authentication.infra.data.repositories.UserRepository;
