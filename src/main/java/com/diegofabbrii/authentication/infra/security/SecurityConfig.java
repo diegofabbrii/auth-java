@@ -38,6 +38,8 @@ public class SecurityConfig {
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(authorize -> authorize
 				.requestMatchers(HttpMethod.POST, "api/auth/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "api/product/list-product").authenticated()
+				.requestMatchers(HttpMethod.POST, "api/product/create-product").hasRole("ADMIN")
 			)
 			.addFilterBefore(_securityFilter, UsernamePasswordAuthenticationFilter.class)
 			.build();
